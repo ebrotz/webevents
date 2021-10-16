@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
+
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
 
 @Component
 public class TimeReceiver {
@@ -17,10 +17,11 @@ public class TimeReceiver {
     @Autowired
     private ObjectMapper mapper;
 
-    /**
-     * The latest time message received.
-     */
-    private TimeMessage timeMessage = new TimeMessage(Instant.now().toEpochMilli());
+    @Autowired
+    private SseRegistry<TimeMessage> sseRegistry;
+
+    @Autowired
+    private TaskExecutor taskExecutor;
 
     /**
      * Saves the latest time received.
@@ -28,20 +29,18 @@ public class TimeReceiver {
      */
     @JmsListener(destination = "topic:time")
     public void receiveTime(String time) {
-        TimeMessage timeMessage;
+        // Get off the listener thread.
+        taskExecutor.execute(() -> {
+            TimeMessage timeMessage;
+            try {
+                timeMessage = mapper.readValue(time, TimeMessage.class);
+                logger.trace("Received time " + time);
+            } catch (Exception ex) {
+                logger.error("Failed to read time message", ex);
+                return;
+            }
 
-        try {
-            timeMessage = mapper.readValue(time, TimeMessage.class);
-            logger.debug("Received time " + time.toString());
-        } catch (Exception ex) {
-            logger.error("Failed to read time message", ex);
-            return;
-        }
-
-        this.timeMessage = timeMessage;
-    }
-
-    public TimeMessage getTimeMessage() {
-        return timeMessage;
+            sseRegistry.send(timeMessage);
+        });
     }
 }
