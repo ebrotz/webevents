@@ -1,4 +1,8 @@
 ---
+logging:
+  level:
+    com:
+      brotz: info
 spring:
   activemq:
     broker-url: tcp://localhost:61616
