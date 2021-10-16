@@ -14,8 +14,7 @@ public class TimePublisher {
 
     @Scheduled(fixedRate = 1000)
     public void publishTime() {
-        System.out.println("Publishing time");
         long now = Instant.now().toEpochMilli();
-        this.jmsTemplate.convertAndSend("topic:time", String.format("{time: %d}", now));
+        this.jmsTemplate.convertAndSend("topic:time", String.format("{\"time\": %d}", now));
     }
 }
