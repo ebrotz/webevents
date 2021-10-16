@@ -18,6 +18,8 @@
     <modules>
         <module>webevents-amq-publisher</module>
         <module>webevents-sse</module>
+        <module>webevents-sse-client</module>
+        <module>webevents-sse-messages</module>
     </modules>
 
     <properties>
@@ -25,4 +27,13 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webevents-sse-messages</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
