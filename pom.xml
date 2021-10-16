@@ -17,6 +17,7 @@
 
     <modules>
         <module>webevents-amq-publisher</module>
+        <module>webevents-sse</module>
     </modules>
 
     <properties>
