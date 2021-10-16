@@ -18,7 +18,6 @@
     <modules>
         <module>webevents-amq-publisher</module>
         <module>webevents-sse</module>
-        <module>webevents-sse-client</module>
         <module>webevents-sse-messages</module>
     </modules>
 
