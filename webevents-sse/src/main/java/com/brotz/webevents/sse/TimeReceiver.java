@@ -1,7 +1,6 @@
 package com.brotz.webevents.sse;
 
 import com.brotz.webevents.sse.dto.TimeMessage;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
